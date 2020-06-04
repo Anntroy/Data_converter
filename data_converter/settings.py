@@ -40,22 +40,29 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
     'django_extensions',
     'simple_history',
     'business_register',
     'location_register',
     'users',
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
-
 ]
 
+SITE_ID = 1
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -142,6 +149,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination','PAGE_SIZE': 5,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny', #IsAuthenticated
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ]
 }
 
@@ -149,4 +159,9 @@ AUTH_USER_MODEL = 'users.DataOceanUser'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-SITE_ID = 1
+CORS_ORIGIN_ALLOW_ALL = True
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
