@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from . import views
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
@@ -58,4 +59,5 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/users/rest-auth/', include('rest_auth.urls')),
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('google/', views.GoogleLogin.as_view(), name='google_login'),
 ]
