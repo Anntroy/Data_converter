@@ -18,6 +18,8 @@ from . import views
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
+from rest_framework_swagger.views import get_swagger_view
 
 from business_register.views.company_views import CompanyView
 from business_register.views.kved_views import KvedView
@@ -51,6 +53,8 @@ router.register(r'company/<int:pk>', CompanyView, basename='company_item')
 router.register(r'register', RegisterView, basename='register')
 router.register(r'register/<int:pk>', RegisterView, basename='registeritem')
 
+schema_view = get_swagger_view(title='DataOcean API')
+
 urlpatterns = [
 
     path('admin/', admin.site.urls),
@@ -58,6 +62,11 @@ urlpatterns = [
 
     path('api/users/', include('users.urls')),
     path('api/users/rest-auth/', include('rest_auth.urls')),
-    path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('api/auth/signup/', include('rest_auth.registration.urls')),
+
+    path(r'api-token-auth/', obtain_jwt_token),
+    path(r'api-token-refresh/', refresh_jwt_token),
+    path(r'api-token-verify/', verify_jwt_token),
+    path(r'doc/', schema_view),
     path('google/', views.GoogleLogin.as_view(), name='google_login'),
 ]
